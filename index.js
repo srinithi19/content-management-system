@@ -67,4 +67,13 @@ function viewAllRoles() {
         })
 }
 
+function viewAllEmployees() {
+    connection.query("SELECT employee.id as Employee_ID, employee.first_name as First_Name, employee.last_name as Last_Name, roles.title as Job_title, department_name as Department,roles.salary as Salary,CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employee INNER JOIN roles on roles.id = employee.role_id INNER JOIN department on department.id = roles.department_id LEFT JOIN employee e on employee.manager_id = e.id",
+        function(err, res) {
+            if (err) throw err
+            console.table(res)
+            init()
+        })
+}
+
 init();
