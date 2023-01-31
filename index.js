@@ -49,5 +49,22 @@ function init() {
     })
 }
 
+function viewAllDepartments() {
+    connection.query("SELECT id as Department_ID, department_name as Department_Name from department",
+        function(err, res) {
+            if (err) throw err
+            console.table(res)
+            init()
+        })
+}
+
+function viewAllRoles() {
+    connection.query("SELECT roles.id as Role_ID, roles.title as Job_title, department.department_name as Department_name, roles.salary as Salary from roles JOIN department on roles.department_id = department.id",
+        function(err, res) {
+            if (err) throw err
+            console.table(res)
+            init()
+        })
+}
 
 init();
