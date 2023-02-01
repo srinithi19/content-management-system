@@ -93,7 +93,7 @@ function addDepartment() {
             }
             )
         })
-}
+    }
     
     var roleArr = [];
     
@@ -106,6 +106,19 @@ function addDepartment() {
             
         })
         return roleArr;
+    }
+    
+    var deptArr = [];
+
+    function selectDept() {
+        connection.query("SELECT * FROM department", function(err, res) {
+            if (err) throw err
+            for (var i = 0; i < res.length; i++) {
+                deptArr.push(res[i].department_name);
+            }
+            
+        })
+        return deptArr;
     }
     
     var managersArr = [];
@@ -121,7 +134,39 @@ function addDepartment() {
     }
     
     function addRole() {
-        
+        connection.query("SELECT roles.title AS Title, roles.salary AS Salary FROM roles", function(err, res) {
+            inquirer.prompt([{
+                name: "title",
+                type: "input",
+                message: "What is the role would you like to add?"
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "What is the Salary?"
+            },
+            {
+                name: "dept",
+                type: "list",
+                message: "What is the Department?",
+                choices: selectDept()
+            },
+            
+        ]).then(function(res) {
+            var deptId = selectDept().indexOf(res.dept) + 1
+            connection.query(
+                "INSERT INTO roles SET ?", {
+                    title: res.title,
+                    salary: res.salary,
+                    department_id : deptId
+                },
+                function(err) {
+                    if (err) throw err;
+                    console.table(res);
+                    init();
+                })
+            })
+        })
     }
     
     function addEmployee() {
