@@ -96,7 +96,7 @@ function addDepartment() {
     }
     
     var roleArr = [];
-    
+
     function selectRole() {
         connection.query("SELECT * FROM roles", function(err, res) {
             if (err) throw err
@@ -122,7 +122,7 @@ function addDepartment() {
     }
     
     var managersArr = [];
-    
+
     function selectManager() {
         connection.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL", function(err, res) {
             if (err) throw err
@@ -211,8 +211,49 @@ function addDepartment() {
     
 }
 
+var lastName = [];
+
+function selectEmployee() {
+    connection.query("SELECT employee.last_name, roles.title FROM employee JOIN roles ON employee.role_id = roles.id;", function(err, res) {
+        if (err) throw err
+        //console.log("ln",res)
+        for (var i = 0; i < res.length; i++) {
+            //console.log(res[i].last_name)
+            lastName.push(res[i].last_name);
+        }
+    })
+    console.log("ln",lastName)
+    return lastName;
+}
+
 function updateEmployee() {
-    
+    connection.query("SELECT employee.last_name, roles.title FROM employee JOIN roles ON employee.role_id = roles.id;", function(err, res) {
+        if (err) throw err;
+        //console.log(res);
+        inquirer.prompt([{
+                name: "lastName",
+                type: "rawlist",
+                message: "What is the Employee's last name? ",
+                choices: selectEmployee()
+            },
+            {
+                name: "roles",
+                type: "rawlist",
+                message: "What is the Employees new title? ",
+                choices: selectRole()
+            },
+        ]).then(function(val) {
+            var roleId = selectRole().indexOf(val.role) + 1
+            connection.query("UPDATE employee SET ? WHERE ?", {
+                role: roleId,
+                last_name: val.lastName
+            }, function() {
+                if (err) throw err
+                init()
+            })
+        })
+
+    })
 }
 
 init();
