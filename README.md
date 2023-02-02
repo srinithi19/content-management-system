@@ -27,7 +27,7 @@ Below is the list of questions inputted by user.
 
 Walkthrough video of using this app is in the following link
 
-Google drive link - (https://drive.google.com/file/d/187q6Y7zjyW9g2voxace2N1nhXSCtiNBa/view)
+Google drive link - (https://drive.google.com/file/d/1cNLrEnPP94VagN7QiGjgJHmrl2nhdXAC/view)
 
 
 ## Learning points
